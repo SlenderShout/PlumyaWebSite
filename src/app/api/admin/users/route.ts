@@ -1,0 +1,97 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { requireAdmin } from '@/lib/auth';
+
+export async function GET() {
+  const adminCheck = await requireAdmin();
+  if (!adminCheck.authorized) {
+    return NextResponse.json({ error: adminCheck.error }, { status: 403 });
+  }
+
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      role: true,
+      credits: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return NextResponse.json({ success: true, users });
+}
+
+export async function PUT(request: Request) {
+  const adminCheck = await requireAdmin();
+  if (!adminCheck.authorized) {
+    return NextResponse.json({ error: adminCheck.error }, { status: 403 });
+  }
+
+  try {
+    const { id, role, credits } = await request.json();
+    if (!id) {
+      return NextResponse.json({ error: 'Kullanıcı ID gereklidir.' }, { status: 400 });
+    }
+
+    const updateData: { role?: string; credits?: number } = {};
+    if (role && ['user', 'admin', 'moderator'].includes(role)) {
+      updateData.role = role;
+    }
+    if (typeof credits === 'number') {
+      updateData.credits = credits;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: updateData,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true,
+        credits: true,
+        createdAt: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, user: updatedUser });
+  } catch (error) {
+    console.error('Admin update user error:', error);
+    return NextResponse.json({ error: 'Kullanıcı güncellenemedi.' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  const adminCheck = await requireAdmin();
+  if (!adminCheck.authorized) {
+    return NextResponse.json({ error: adminCheck.error }, { status: 403 });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ error: 'Kullanıcı ID gereklidir.' }, { status: 400 });
+    }
+
+    // Protect against admin deleting themselves
+    if (id === adminCheck.user?.id) {
+      return NextResponse.json(
+        { error: 'Kendi yönetici hesabınızı silemezsiniz.' },
+        { status: 400 }
+      );
+    }
+
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true, message: 'Kullanıcı silindi.' });
+  } catch (error) {
+    console.error('Admin delete user error:', error);
+    return NextResponse.json({ error: 'Kullanıcı silinemedi.' }, { status: 500 });
+  }
+}

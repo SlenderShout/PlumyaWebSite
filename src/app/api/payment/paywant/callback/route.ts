@@ -1,0 +1,88 @@
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { verifyPaywantCallbackHash } from '@/lib/paywant';
+
+export async function POST(request: Request) {
+  try {
+    let body: Record<string, string> = {};
+
+    const contentType = request.headers.get('content-type') || '';
+    if (contentType.includes('application/x-www-form-urlencoded')) {
+      const formData = await request.formData();
+      formData.forEach((value, key) => {
+        body[key] = value.toString();
+      });
+    } else {
+      body = await request.json();
+    }
+
+    const {
+      SiparisID,
+      ExtraData,
+      UserIP,
+      Status,
+      Hash,
+    } = body;
+
+    if (!SiparisID || !ExtraData || !Hash) {
+      return new NextResponse('INVALID_PARAMS', { status: 400 });
+    }
+
+    // Verify cryptographic signature from Paywant
+    const isValid = verifyPaywantCallbackHash(SiparisID, ExtraData, UserIP || '127.0.0.1', Hash);
+    if (!isValid) {
+      console.warn('Paywant callback signature mismatch:', { SiparisID, Hash });
+      return new NextResponse('BAD_HASH', { status: 403 });
+    }
+
+    // Parse extra data
+    let extra: {
+      orderId: string;
+      userId: string;
+      username: string;
+      packageId: string;
+      coins: number;
+      amount: number;
+    };
+
+    try {
+      extra = JSON.parse(ExtraData);
+    } catch {
+      return new NextResponse('INVALID_EXTRA_DATA', { status: 400 });
+    }
+
+    // Paywant Status == 100 indicates SUCCESS
+    if (String(Status) === '100') {
+      const { userId, coins, username } = extra;
+
+      // Credit user in PostgreSQL
+      await prisma.$transaction([
+        // 1. Update user balance
+        prisma.user.update({
+          where: { id: userId },
+          data: {
+            credits: { increment: coins },
+          },
+        }),
+        // 2. Add credit load history record
+        prisma.creditLoad.create({
+          data: {
+            userId,
+            username: username || 'Oyuncu',
+            amount: coins,
+          },
+        }),
+      ]);
+
+      console.log(`✔ Paywant payment successful: +${coins} coins credited to ${username} (${userId})`);
+      // Paywant expects exact string "OK" with 200 OK status
+      return new NextResponse('OK', { status: 200 });
+    } else {
+      console.log(`Paywant payment failed or cancelled: Order ${SiparisID}, Status ${Status}`);
+      return new NextResponse('OK', { status: 200 });
+    }
+  } catch (error) {
+    console.error('Paywant callback error:', error);
+    return new NextResponse('SERVER_ERROR', { status: 500 });
+  }
+}

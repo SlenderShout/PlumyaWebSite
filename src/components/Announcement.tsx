@@ -11,7 +11,7 @@ export default function Announcement() {
   if (!settings.announcement || dismissed) return null;
 
   return (
-    <aside aria-label="Sunucu duyurusu" className="bg-[var(--accent)] text-white">
+    <aside aria-label="Sunucu duyurusu" className="bg-[var(--surface-2)] text-[var(--ink)]">
       <div className="wrap flex items-center justify-between gap-3 py-2 text-sm">
         <p className="truncate font-medium">{settings.announcement}</p>
         <button

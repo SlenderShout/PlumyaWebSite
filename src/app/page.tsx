@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Check, Copy, Swords, Users, Castle } from "lucide-react";
+import { Check, Copy, Plus } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
-import PixelCastle from "@/components/PixelCastle";
+import Announcement from "@/components/Announcement";
+import PixelBlossom from "@/components/PixelBlossom";
 import NewsCard from "@/components/NewsCard";
 import Supporters from "@/components/Supporters";
 import RecentRegistrations from "@/components/RecentRegistrations";
+import Reveal from "@/components/Reveal";
 
 const DiscordMark = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -15,17 +17,27 @@ const DiscordMark = () => (
   </svg>
 );
 
-function SectionTitle({ children, aside }: { children: React.ReactNode; aside?: React.ReactNode }) {
-  return (
-    <div className="flex items-end justify-between gap-4 mb-7">
-      <h2 className="font-display text-3xl sm:text-4xl font-bold uppercase tracking-wide">{children}</h2>
-      {aside}
-    </div>
-  );
-}
+const FAQ = (ip: string, port: string) => [
+  {
+    q: "Sunucuya nasıl katılabilirim?",
+    a: `Minecraft'ı 1.20 veya üstü bir sürümde açın, çok oyunculu menüsüne ${ip}${port && port !== "25565" ? ":" + port : ""} adresini ekleyin. Bedrock oyuncuları da aynı adresle bağlanabilir.`,
+  },
+  {
+    q: "Mağaza ürünleri ne zaman teslim edilir?",
+    a: "Ödeme onaylandığı anda krediniz hesabınıza yüklenir. Kredilerinizi oyun içindeki mağaza menüsünden dilediğiniz gibi harcayabilirsiniz.",
+  },
+  {
+    q: "Yetkili alımı var mı?",
+    a: "Alımlar açıldığında Discord duyurularından ve haber bölümünden haber veriyoruz. Başvurular destek sistemi üzerinden alınır.",
+  },
+  {
+    q: "Destek sistemine nasıl ulaşırım?",
+    a: "Hesabınıza giriş yaptıktan sonra Destek sayfasından yeni bir talep oluşturun. Yetkililer yanıtladığında aynı sayfada görürsünüz.",
+  },
+];
 
 export default function HomePage() {
-  const { settings, news, users } = useApp();
+  const { settings, news, users, currentUser } = useApp();
   const [copied, setCopied] = useState(false);
   const [online, setOnline] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
@@ -60,151 +72,171 @@ export default function HomePage() {
   };
 
   const players = online ?? settings.onlinePlayers ?? 0;
-  const shownNews = showAll ? news : news.slice(0, 3);
+  const [lead, ...rest] = news;
+  const restShown = showAll ? rest : rest.slice(0, 2);
+  const faq = FAQ(ip, settings.serverPort);
 
   return (
     <div>
+      <Announcement />
+
       {/* ---------- Hero ---------- */}
-      <section className="relative min-h-[620px] sm:min-h-[680px] overflow-hidden">
-        <div className="absolute inset-0">
-          <PixelCastle />
-        </div>
-
-        <div className="wrap relative pt-40 sm:pt-44 pb-24 text-center flex flex-col items-center">
-          <dl className="flex items-start justify-center gap-12 rise">
-            <div className="flex flex-col items-center gap-1">
-              <Users size={20} className="text-[var(--accent)]" />
-              <dd className="text-2xl font-bold tabular-nums leading-none">{players.toLocaleString("tr-TR")}</dd>
-              <dt className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">Çevrimiçi savaşçı</dt>
-            </div>
-            <div className="flex flex-col items-center gap-1">
-              <Castle size={20} className="text-[var(--accent)]" />
-              <dd className="text-2xl font-bold tabular-nums leading-none">{(settings.maxPlayers || 200).toLocaleString("tr-TR")}</dd>
-              <dt className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">Kale kapasitesi</dt>
-            </div>
-          </dl>
-
-          <h1 className="font-display font-bold uppercase leading-[1.02] mt-10 text-[clamp(40px,7.4vw,76px)] max-w-[19ch] text-balance rise rise-2">
-            Krallığın kaderi <span className="text-[var(--accent)]">senin elinde</span>
+      <section className="wrap grid lg:grid-cols-[1.3fr_1fr] gap-10 lg:gap-14 items-center pt-10 pb-16 lg:pt-14 lg:pb-24">
+        <div>
+          <h1 className="font-extrabold leading-[1.02] text-[clamp(38px,5.3vw,76px)] max-w-[13ch] text-balance rise">
+            Emeğin değer gördüğü diyar
           </h1>
-
-          <p className="mt-6 max-w-xl text-base sm:text-lg text-[var(--ink)]/85 leading-relaxed rise rise-3">
+          <p className="mt-7 max-w-md text-lg leading-relaxed text-[var(--muted)] rise rise-2">
             Survival ve emek SkyBlock sunucusu. 128 tickrate altyapı, dengeli pazar ekonomisi ve hilesiz, rekabetçi bir oyun dünyası.
           </p>
 
-          <div className="mt-9 flex flex-col sm:flex-row gap-3 rise rise-4">
-            <button
-              type="button"
-              onClick={copy}
-              className="btn-gold h-12 px-7 flex items-center justify-center gap-2.5 text-sm uppercase cursor-pointer"
-            >
-              <Swords size={17} />
-              {copied ? "Adres kopyalandı" : `Savaşa katıl · ${ip}`}
-              {copied ? <Check size={16} /> : <Copy size={15} />}
+          <div className="mt-9 flex flex-col sm:flex-row gap-3 rise rise-3">
+            {currentUser ? (
+              <Link href="/market" className="btn-accent h-14 px-8 flex items-center justify-center text-base">
+                Mağazaya git
+              </Link>
+            ) : (
+              <Link href="/register" className="btn-accent h-14 px-8 flex items-center justify-center text-base">
+                Hemen kayıt ol
+              </Link>
+            )}
+            <button type="button" onClick={copy} className="btn-soft h-14 px-8 flex items-center justify-center gap-2.5 text-base cursor-pointer">
+              {copied ? "Adres kopyalandı" : ip}
+              {copied ? <Check size={17} className="text-[var(--grass)]" /> : <Copy size={16} />}
             </button>
-            <Link href="/market" className="btn-ghost h-12 px-7 flex items-center justify-center text-sm uppercase bg-[var(--bg)]/60">
-              Mağazayı incele
-            </Link>
           </div>
 
-          {settings.announcement && (
-            <p className="mt-8 text-sm text-[var(--accent)] font-bold">{settings.announcement}</p>
-          )}
+          <dl className="mt-12 flex gap-12 rise rise-4">
+            <div>
+              <dd className="font-display text-6xl font-semibold tabular-nums leading-none">{players.toLocaleString("tr-TR")}</dd>
+              <dt className="mt-2 text-sm text-[var(--muted)]">şu an oyunda</dt>
+            </div>
+            <div>
+              <dd className="font-display text-6xl font-semibold tabular-nums leading-none">{(settings.maxPlayers || 200).toLocaleString("tr-TR")}</dd>
+              <dt className="mt-2 text-sm text-[var(--muted)]">oyuncu kapasitesi</dt>
+            </div>
+          </dl>
+        </div>
+
+        <div className="relative aspect-[6/5] lg:aspect-[5/6] w-full overflow-hidden bg-[var(--surface)] notch-lg rise rise-2">
+          <PixelBlossom />
         </div>
       </section>
 
       {/* ---------- News ---------- */}
-      <section className="wrap pt-6">
-        <SectionTitle
-          aside={
-            news.length > 3 && (
-              <button
-                type="button"
-                onClick={() => setShowAll(!showAll)}
-                className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--accent)] hover:text-[var(--accent-hover)] cursor-pointer pb-2"
-              >
-                {showAll ? "Daha az göster" : "Tümünü gör →"}
-              </button>
-            )
-          }
-        >
-          Güncel gelişmeler
-        </SectionTitle>
+      <section className="wrap py-16 lg:py-24">
+        <Reveal className="flex items-end justify-between gap-4 mb-10">
+          <h2 className="text-4xl sm:text-5xl font-extrabold leading-none">Son güncellemeler</h2>
+          {rest.length > 2 && (
+            <button
+              type="button"
+              onClick={() => setShowAll(!showAll)}
+              className="text-sm font-bold text-[var(--accent)] hover:text-[var(--accent-hover)] cursor-pointer"
+            >
+              {showAll ? "Daha az göster" : "Tümünü gör"}
+            </button>
+          )}
+        </Reveal>
 
-        {news.length === 0 ? (
-          <p className="text-[var(--muted)] py-16 text-center">Henüz yayınlanmış bir duyuru yok.</p>
+        {!lead ? (
+          <p className="text-[var(--muted)] py-12">Henüz yayınlanmış bir duyuru yok.</p>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {shownNews.map((item, i) => (
-              <NewsCard key={item.id} news={item} index={i} />
-            ))}
+          <div className="space-y-3">
+            <Reveal>
+              <NewsCard news={lead} index={0} variant="feature" />
+            </Reveal>
+            {restShown.length > 0 && (
+              <div className={`grid gap-3 ${restShown.length > 1 ? "md:grid-cols-2" : ""}`}>
+                {restShown.map((item, i) => (
+                  <Reveal key={item.id} delay={i * 80}>
+                    <NewsCard news={item} index={i + 1} variant="compact" />
+                  </Reveal>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </section>
 
-      <div className="wrap mt-24" aria-hidden="true">
-        <div className="divider"><i /></div>
-      </div>
+      {/* ---------- Ranking ---------- */}
+      <div className="bg-[var(--surface)]">
+      <section className="wrap py-16 lg:py-24">
+        <Reveal className="mb-10 max-w-2xl">
+          <h2 className="text-4xl sm:text-5xl font-extrabold leading-none">Sıralama ve aktivite</h2>
+          <p className="mt-4 text-lg text-[var(--muted)]">Sunucunun en çok destek veren oyuncuları ve mağazadaki son hareketler.</p>
+        </Reveal>
+        <Reveal>
+          {settings.showRecentCredits ? (
+            <Supporters />
+          ) : (
+            <p className="text-[var(--muted)]">Bu bölüm şu an gizli.</p>
+          )}
+        </Reveal>
 
-      {/* ---------- Supporters ---------- */}
-      <section className="wrap mt-24">
-        <div className="relative">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase tracking-[0.18em] text-center bg-[var(--bg)] border border-[var(--accent)] mx-auto w-fit px-10 py-4 relative z-10 -mb-7">
-            Destekçilerimiz
-          </h2>
-          <div className="pt-7">
-            {settings.showRecentCredits ? (
-              <Supporters />
-            ) : (
-              <p className="text-center text-[var(--muted)] py-10">Destekçiler listesi şu an gizli.</p>
-            )}
-          </div>
-        </div>
+        <Reveal className="mt-14">
+          <h3 className="text-2xl font-extrabold mb-5">
+            Yeni gelenler <span className="text-[var(--muted)] font-semibold">· {users.length}</span>
+          </h3>
+          <RecentRegistrations />
+        </Reveal>
       </section>
-
-      <div className="wrap mt-24" aria-hidden="true">
-        <div className="divider"><i /></div>
       </div>
 
-      {/* ---------- Newcomers ---------- */}
-      <section className="wrap mt-24">
-        <SectionTitle
-          aside={
-            <span className="text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)] border border-[var(--line)] px-3 py-2 mb-1">
-              {users.length} yeni serüvenci
-            </span>
-          }
-        >
-          Son katılan serüvenciler
-        </SectionTitle>
-        <RecentRegistrations />
+      {/* ---------- FAQ ---------- */}
+      <section className="wrap py-16 lg:py-24 grid lg:grid-cols-[1fr_1.35fr] gap-12">
+        <Reveal>
+          <h2 className="text-4xl sm:text-5xl font-extrabold leading-[1.02]">Sık sorulan sorular</h2>
+          <p className="mt-4 text-lg text-[var(--muted)] max-w-sm">
+            Aradığını bulamazsan destek ekibimiz yardımcı olmaktan memnuniyet duyar.
+          </p>
+          <Link href="/support" className="btn-soft mt-7 h-12 px-6 inline-flex items-center text-sm">
+            Destek al
+          </Link>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <ul className="space-y-3">
+            {faq.map((f) => (
+              <li key={f.q}>
+                <details className="group notch bg-[var(--surface)] open:bg-[var(--surface-2)] transition-colors">
+                  <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer text-lg font-semibold">
+                    {f.q}
+                    <Plus size={20} className="shrink-0 text-[var(--accent)] transition-transform group-open:rotate-45" />
+                  </summary>
+                  <p className="px-6 pb-6 text-[var(--muted)] leading-relaxed max-w-xl">{f.a}</p>
+                </details>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </section>
-
-      <div className="wrap mt-24" aria-hidden="true">
-        <div className="divider"><i /></div>
-      </div>
 
       {/* ---------- Call to action ---------- */}
-      <section className="wrap mt-24 text-center">
-        <h2 className="font-display text-4xl sm:text-5xl font-bold uppercase">Maceraya sen de katıl</h2>
-        <p className="mt-4 max-w-xl mx-auto text-[var(--ink)]/85 leading-relaxed">
-          Binlerce oyuncunun beklediği bu büyülü dünyada yerini al. Klanını kur, ekonomiyi yönet ve krallığın geleceğini şekillendir.
-        </p>
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a
-            href={invite}
-            target="_blank"
-            rel="noreferrer"
-            className="bg-[var(--ink)] text-[var(--accent-ink)] hover:bg-white transition-colors h-12 px-7 flex items-center justify-center gap-2.5 text-sm font-bold uppercase tracking-[0.04em]"
-          >
-            Discord sunucumuza katılın
-            <span className="w-7 h-7 bg-[var(--accent)] flex items-center justify-center">
+      <section className="bg-[var(--accent)] text-[var(--accent-ink)] mt-8">
+        <div className="wrap py-16 lg:py-20 flex flex-col xl:flex-row xl:items-center justify-between gap-8">
+          <div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold leading-none">Maceraya hazır mısın?</h2>
+            <p className="mt-3 text-lg max-w-md opacity-85">Hemen kayıt ol, ilk adımını at ve diyarın bir parçası ol.</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {!currentUser && (
+              <Link href="/register" className="bg-[var(--accent-ink)] text-white hover:bg-black transition-colors h-14 px-8 flex items-center justify-center font-bold whitespace-nowrap">
+                Kayıt ol
+              </Link>
+            )}
+            <Link href="/market" className="bg-black/15 hover:bg-black/25 transition-colors h-14 px-8 flex items-center justify-center font-bold whitespace-nowrap">
+              Mağaza
+            </Link>
+            <a
+              href={invite}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-black/15 hover:bg-black/25 transition-colors h-14 px-8 flex items-center justify-center gap-2.5 font-bold whitespace-nowrap"
+            >
               <DiscordMark />
-            </span>
-          </a>
-          <Link href="/about" className="btn-ghost h-12 px-7 flex items-center justify-center text-sm uppercase">
-            Sunucu rehberi
-          </Link>
+              Discord&apos;a katıl
+            </a>
+          </div>
         </div>
       </section>
     </div>

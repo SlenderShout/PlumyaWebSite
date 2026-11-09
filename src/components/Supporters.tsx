@@ -1,30 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { Crown, Coins, ShoppingCart } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
-
-function Head({ icon: Icon, title }: { icon: typeof Crown; title: string }) {
-  return (
-    <div className="flex items-center justify-between mb-4">
-      <h3 className="font-display text-lg font-bold">{title}</h3>
-      <Icon size={17} className="text-[var(--accent)]" />
-    </div>
-  );
-}
 
 const Avatar = ({ name }: { name: string }) => (
   <img
     src={`https://mc-heads.net/avatar/${encodeURIComponent(name)}/64`}
     alt=""
-    width={32}
-    height={32}
-    className="w-8 h-8 bg-[var(--surface-3)] shrink-0"
+    width={36}
+    height={36}
+    className="w-9 h-9 bg-[var(--surface-3)] shrink-0"
     onError={(e) => {
       e.currentTarget.style.visibility = "hidden";
     }}
   />
 );
+
+function Column({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="notch bg-[var(--surface-2)] p-6 min-h-[320px] flex flex-col">
+      <h3 className="text-xl font-extrabold mb-5">{title}</h3>
+      {children}
+    </div>
+  );
+}
 
 export default function Supporters() {
   const { creditLoads, coinPackages } = useApp();
@@ -39,79 +38,69 @@ export default function Supporters() {
 
   const packs = coinPackages.slice(0, 5);
 
-  const col = "bg-[var(--parch-dark)] p-5 min-h-[300px]";
-  const empty = "text-sm text-[var(--muted)] text-center mt-16";
-  const row = "flex items-center gap-3 py-2";
+  const empty = "text-[var(--muted)] my-auto text-center";
+  const row = "flex items-center gap-3 py-2.5";
 
   return (
-    <div className="relative bg-[var(--parch)] border border-[var(--accent)] p-3 sm:p-5">
-      <div className="grid gap-4 md:grid-cols-3">
-        <div className={col}>
-          <Head icon={Crown} title="Yüce Lordlar" />
-          {lords.length === 0 ? (
-            <p className={empty}>Henüz kimse destek vermedi.</p>
-          ) : (
-            <ol>
-              {lords.map(([name, total]) => (
-                <li key={name} className={row}>
-                  <Avatar name={name} />
-                  <span className="flex-1 min-w-0 font-bold truncate">{name}</span>
-                  <span className="text-sm font-bold text-[var(--accent)] tabular-nums">
-                    {total.toLocaleString("tr-TR")}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          )}
-        </div>
+    <div className="grid gap-3 md:grid-cols-3">
+      <Column title="En çok destek verenler">
+        {lords.length === 0 ? (
+          <p className={empty}>Henüz kimse destek vermedi.</p>
+        ) : (
+          <ol>
+            {lords.map(([name, total], i) => (
+              <li key={name} className={row}>
+                <span className="w-6 font-display text-3xl font-semibold text-[var(--accent)] tabular-nums">{i + 1}</span>
+                <Avatar name={name} />
+                <span className="flex-1 min-w-0 font-bold truncate">{name}</span>
+                <span className="text-sm font-bold tabular-nums">{total.toLocaleString("tr-TR")}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </Column>
 
-        <div className={col}>
-          <Head icon={Coins} title="Son Bağışlar" />
-          {recent.length === 0 ? (
-            <p className={empty}>Henüz bağış yok.</p>
-          ) : (
-            <ul>
-              {recent.map((l) => (
-                <li key={l.id} className={row}>
-                  <Avatar name={l.username} />
-                  <span className="flex-1 min-w-0">
-                    <span className="block font-bold truncate">{l.username}</span>
-                    <span className="block text-xs text-[var(--muted)]">
-                      {new Date(l.date || l.createdAt || 0).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
-                    </span>
+      <Column title="Son bağışlar">
+        {recent.length === 0 ? (
+          <p className={empty}>Henüz bağış yok.</p>
+        ) : (
+          <ul>
+            {recent.map((l) => (
+              <li key={l.id} className={row}>
+                <Avatar name={l.username} />
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold truncate">{l.username}</span>
+                  <span className="block text-xs text-[var(--muted)]">
+                    {new Date(l.date || l.createdAt || 0).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}
                   </span>
-                  <span className="text-sm font-bold text-[var(--accent)] tabular-nums">+{l.amount}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                </span>
+                <span className="text-sm font-bold text-[var(--accent)] tabular-nums">+{l.amount}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Column>
 
-        <div className={col}>
-          <Head icon={ShoppingCart} title="Pazar Hareketliliği" />
-          {packs.length === 0 ? (
-            <p className={empty}>Mağazada ürün yok.</p>
-          ) : (
-            <ul>
-              {packs.map((p) => (
-                <li key={p.id} className={row}>
-                  <span className="w-8 h-8 bg-[var(--surface-3)] flex items-center justify-center text-[var(--accent)] shrink-0">
-                    <Coins size={16} />
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block font-bold truncate">{p.name}</span>
-                    <span className="block text-xs text-[var(--muted)]">{p.coins.toLocaleString("tr-TR")} kredi</span>
-                  </span>
-                  <span className="text-sm font-bold tabular-nums">{p.price} ₺</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link href="/market" className="btn-gold mt-3 inline-flex px-4 py-2 text-xs uppercase">
-            Markete git
-          </Link>
-        </div>
-      </div>
+      <Column title="Mağaza paketleri">
+        {packs.length === 0 ? (
+          <p className={empty}>Mağazada ürün yok.</p>
+        ) : (
+          <ul>
+            {packs.map((p) => (
+              <li key={p.id} className={row}>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold truncate">{p.name}</span>
+                  <span className="block text-xs text-[var(--muted)]">{p.coins.toLocaleString("tr-TR")} kredi</span>
+                </span>
+                <span className="text-sm font-bold tabular-nums">{p.price} ₺</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Link href="/market" className="btn-accent mt-auto self-start px-5 h-11 flex items-center text-sm">
+          Markete git
+        </Link>
+      </Column>
     </div>
   );
 }

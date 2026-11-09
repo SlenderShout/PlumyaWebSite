@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
-import { Almendra, Alegreya_Sans } from "next/font/google";
+import { Pixelify_Sans, Figtree } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/contexts/AppContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const display = Almendra({
+const display = Pixelify_Sans({
   variable: "--font-display",
-  weight: ["400", "700"],
   subsets: ["latin", "latin-ext"],
 });
 
-const body = Alegreya_Sans({
+const body = Figtree({
   variable: "--font-body",
-  weight: ["400", "500", "700"],
   subsets: ["latin", "latin-ext"],
 });
 
@@ -25,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr" className={`${display.variable} ${body.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col relative">
+      <body className="min-h-full flex flex-col">
         <AppProvider>
           <Navbar />
           <main className="flex-1">{children}</main>

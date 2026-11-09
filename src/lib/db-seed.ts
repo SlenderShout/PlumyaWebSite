@@ -58,33 +58,7 @@ export async function seedDatabaseIfEmpty() {
       console.log('✔ Default CoinPackages seeded.');
     }
 
-    // 4. Ensure News exist
-    const newsCount = await prisma.news.count();
-    if (newsCount === 0) {
-      await prisma.news.createMany({
-        data: [
-          {
-            title: 'Yeni Sezon Başladı! 🎉',
-            content:
-              'Plumya sunucusunda yepyeni bir sezon başlıyor! Tüm haritalar sıfırlandı, yeni biyomlar eklendi ve özel etkinlikler sizi bekliyor. İlk hafta içinde giriş yapan herkese 100 kredi hediye!',
-            author: 'PlumyaAdmin',
-          },
-          {
-            title: 'SkyBlock Güncellemesi v2.0',
-            content:
-              'SkyBlock modumuza dev güncelleme geldi! Yeni ada temaları, özel minion sistemi, ada seviyesi yarışmaları ve otomatik çiftlik geliştirmeleri eklendi. /is komutu ile hemen keşfedin!',
-            author: 'PlumyaAdmin',
-          },
-          {
-            title: 'Cadılar Bayramı Etkinliği 🎃',
-            content:
-              'Korkunç eğlence Plumya\'da! Spawn alanı balkabakları ve hayaletlerle süslendi. Özel etkinlik zindanını tamamlayarak benzersiz Cadılar Bayramı kozmetiklerini kazanın.',
-            author: 'PlumyaAdmin',
-          },
-        ],
-      });
-      console.log('✔ Default News seeded.');
-    }
+    // Note: News are NOT auto-seeded — admins manage them manually via the panel.
   } catch (error) {
     // If DB is offline, log gracefully
     console.warn('Database seed skipped or pending DB connection:', error);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Server, Copy, Check, Users, RefreshCw, Wifi, WifiOff } from "lucide-react";
+import { Server, Copy, Check, Users, RefreshCw } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 
 interface MCStatusResponse {
@@ -31,7 +31,7 @@ export default function ActivePlayers() {
         setMcStatus(data);
       }
     } catch (e) {
-      console.warn("mcstatus.io fetch error:", e);
+      console.warn("mcstatus fetch error:", e);
     } finally {
       setLoading(false);
     }
@@ -39,21 +39,13 @@ export default function ActivePlayers() {
 
   useEffect(() => {
     fetchStatus();
-    // Auto refresh every 45 seconds
     const interval = setInterval(fetchStatus, 45000);
     return () => clearInterval(interval);
   }, [fetchStatus]);
 
-  // Determine online count and maximum players
-  // If mcstatus.io is online, use live data; otherwise fallback to settings values
   const isOnline = mcStatus ? mcStatus.online : true;
-  const online = mcStatus?.online
-    ? mcStatus.playersOnline
-    :  0;
-  const max = mcStatus?.online
-    ? mcStatus.playersMax
-    : 0;
-
+  const online = mcStatus?.online ? mcStatus.playersOnline : (settings.onlinePlayers || 0);
+  const max = mcStatus?.online ? mcStatus.playersMax : (settings.maxPlayers || 200);
   const percentage = max > 0 ? Math.min((online / max) * 100, 100) : 0;
 
   const copyIP = () => {
@@ -63,111 +55,95 @@ export default function ActivePlayers() {
   };
 
   return (
-    <div className="glass-panel rounded-2xl p-5 relative overflow-hidden group">
-      {/* Background radial glow */}
-      <div
-        className={`absolute -bottom-10 -right-10 w-28 h-28 rounded-full blur-2xl pointer-events-none transition-colors ${
-          isOnline ? "bg-emerald-500/10" : "bg-amber-500/10"
-        }`}
-      />
-
-      <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-purple-500/15">
+    <div className="glass-panel rounded-xl p-4 sm:p-5 relative overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center gap-2.5">
-          <div
-            className={`w-8 h-8 rounded-lg border flex items-center justify-center ${
-              isOnline
-                ? "bg-gradient-to-tr from-emerald-500/25 to-teal-500/25 border-emerald-400/30 text-emerald-300"
-                : "bg-gradient-to-tr from-amber-500/25 to-orange-500/25 border-amber-400/30 text-amber-300"
-            }`}
-          >
-            <Server size={16} />
+          <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-zinc-300">
+            <Server size={15} />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-bold text-white tracking-wide">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-200">
                 Sunucu Durumu
               </h3>
               <button
                 onClick={fetchStatus}
-                title="Sunucu Durumunu Yenile"
-                className="text-purple-400/60 hover:text-purple-200 transition-colors cursor-pointer"
+                title="Yenile"
+                aria-label="Sunucu durumunu yenile"
+                className="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
               >
-                <RefreshCw size={11} className={loading ? "animate-spin text-purple-300" : ""} />
+                <RefreshCw size={11} className={loading ? "animate-spin text-purple-400" : ""} />
               </button>
             </div>
+            <p className="text-[11px] text-zinc-400">Java &amp; Bedrock v1.20+</p>
           </div>
         </div>
 
-        {/* Live Status Indicator from mcstatus.io */}
-        {isOnline ? (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-            </span>
-            <span className="text-[11px] text-emerald-300 font-semibold tracking-wide">
-              Çevrimiçi
-            </span>
-          </div>
-        ) : (
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30">
-            <span className="inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-            <span className="text-[11px] text-amber-300 font-semibold tracking-wide">
-              Bakımda
-            </span>
-          </div>
-        )}
+        {/* Status Pill */}
+        <div
+          className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[11px] font-medium ${
+            isOnline
+              ? "bg-emerald-500/10 border-emerald-500/25 text-emerald-400"
+              : "bg-amber-500/10 border-amber-500/25 text-amber-400"
+          }`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              isOnline ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+            }`}
+          />
+          <span>{isOnline ? "Çevrim içi" : "Bakımda"}</span>
+        </div>
       </div>
 
-      {/* Player Count & Bar */}
+      {/* Players Progress */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-1.5 text-xs">
-          <span className="text-purple-300/80 flex items-center gap-1.5 font-medium">
-            <Users size={13} className="text-purple-400" />
-            Aktif Oyuncular
+          <span className="text-zinc-400 flex items-center gap-1.5">
+            <Users size={13} className="text-zinc-500" />
+            Aktif Oyuncu
           </span>
-          <span className="font-bold text-white">
-            <span className={isOnline ? "text-emerald-400 font-extrabold" : "text-amber-400 font-extrabold"}>
+          <span className="font-mono text-xs font-semibold text-white">
+            <span className={isOnline ? "text-emerald-400" : "text-amber-400"}>
               {online.toLocaleString()}
-            </span>{" "}
-            <span className="text-purple-300/50">/</span> {max.toLocaleString()}
+            </span>
+            <span className="text-zinc-500"> / </span>
+            {max.toLocaleString()}
           </span>
         </div>
-        <div className="w-full h-2.5 bg-black/40 rounded-full overflow-hidden p-0.5 border border-purple-500/20">
+
+        <div className="w-full h-1.5 bg-zinc-800/80 rounded-full overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-700 shadow-sm ${
-              isOnline
-                ? "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-emerald-400"
-                : "bg-gradient-to-r from-purple-500 to-amber-500"
+            className={`h-full rounded-full transition-all duration-500 ${
+              isOnline ? "bg-purple-500" : "bg-amber-500"
             }`}
-            style={{ width: `${Math.max(percentage, 5)}%` }}
+            style={{ width: `${Math.max(percentage, 4)}%` }}
           />
         </div>
       </div>
 
-      {/* Server IP Copy Box */}
-      <div className="pt-2">
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-black/40 border border-purple-500/25">
-          <code className="flex-1 text-xs font-mono text-purple-200 px-2 py-1 truncate">
-            {serverAddress}
-          </code>
-          <button
-            onClick={copyIP}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white shadow-md shadow-purple-900/40 transition-all cursor-pointer shrink-0"
-          >
-            {copied ? (
-              <>
-                <Check size={13} className="text-emerald-300" />
-                <span className="text-emerald-200">Kopyalandı</span>
-              </>
-            ) : (
-              <>
-                <Copy size={13} />
-                <span>Kopyala</span>
-              </>
-            )}
-          </button>
-        </div>
+      {/* IP Box */}
+      <div className="flex items-center gap-2 p-1.5 rounded-lg bg-black/40 border border-white/[0.08]">
+        <code className="flex-1 text-xs font-mono text-zinc-300 px-2 truncate select-all">
+          {serverAddress}
+        </code>
+        <button
+          onClick={copyIP}
+          className="flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.08] hover:bg-white/[0.14] text-white border border-white/[0.1] transition-all cursor-pointer shrink-0"
+        >
+          {copied ? (
+            <>
+              <Check size={12} className="text-emerald-400" />
+              <span className="text-emerald-400">Kopyalandı</span>
+            </>
+          ) : (
+            <>
+              <Copy size={12} className="text-zinc-400" />
+              <span>Kopyala</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );

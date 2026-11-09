@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plumya - Minecraft Sunucusu",
-  description: "Plumya Minecraft Sunucusu - Erik temalı eğlenceli bir dünya!",
+  title: "Plumya Network • Minecraft Sunucusu",
+  description: "Plumya Minecraft Network — 1.20+ Java & Bedrock destekli emek Survival ve SkyBlock topluluk sunucusu.",
 };
 
 export default function RootLayout({

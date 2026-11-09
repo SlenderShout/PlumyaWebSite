@@ -1,89 +1,113 @@
 import {
-  Sparkles,
   ShieldCheck,
-  Zap,
-  Heart,
+  Cpu,
   Users,
+  CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen py-16 px-4 relative overflow-hidden">
-      {/* Background ambient orbs */}
-      <div className="absolute top-20 right-1/3 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-20 left-1/4 w-96 h-96 bg-fuchsia-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <div className="max-w-4xl mx-auto space-y-12">
+    <div className="min-h-screen py-14 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto space-y-10">
+        
         {/* Header */}
-        <div className="text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-400/30 text-purple-200 text-xs font-semibold mb-4 backdrop-blur-md">
-            <Sparkles size={14} className="text-fuchsia-400" />
-            <span>Biz Kimiz?</span>
-          </div>
-
-          <h1 className="text-4xl md:text-6xl font-black text-white mb-5 tracking-tight">
-            🍇 Plumya <span className="gradient-title">Hakkında</span>
+        <div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            Hakkımızda
           </h1>
-          <p className="text-purple-200/80 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-            Plumya, oyuncularına lagsiz, adil ve samimi bir Minecraft çok oyunculu ortamı sunmak amacıyla hayata geçirilmiş erik temalı bir sunucu ağıdır.
+          <p className="text-sm sm:text-base text-zinc-400 leading-relaxed max-w-2xl">
+            Plumya, Türkiye merkezli Minecraft oyuncuları için optimize edilmiş altyapı, adil ekonomi ve dengeli oyun modları sunan bağımsız bir topluluk ağıdır.
           </p>
         </div>
 
-        {/* Story & Mission Card */}
-        <div className="glass-panel rounded-3xl p-8 md:p-10 border border-purple-500/25 space-y-6">
-          <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2.5">
-            <span className="text-2xl">🌱</span>
-            <span>Hikayemiz ve Amacımız</span>
-          </h2>
-          <p className="text-sm md:text-base text-purple-200/80 leading-relaxed">
-            Plumya, klasik ve monotonlaşmış sunucu deneyimlerinden sıkılan oyuncular için taze, yenilikçi ve güvenilir bir alternatif olarak kuruldu. Amacımız, her yaştan oyuncunun güvenle katılabileceği, adaletin ve saygının ön planda olduğu, uzun soluklu bir Minecraft dünyası inşa etmektir.
-          </p>
+        {/* Core Pillars */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="glass-panel rounded-xl p-5 border border-white/[0.08]">
+            <Cpu className="w-6 h-6 text-purple-400 mb-3" />
+            <h3 className="text-sm font-semibold text-white mb-1.5">
+              Yüksek Performanslı Altyapı
+            </h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              128 tickrate optimizasyonu, kurumsal DDoS koruması ve yüksek frekanslı NVMe sunucularla sıfır gecikmeli oyun deneyimi.
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-purple-500/15">
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-purple-500/15 text-center">
-              <ShieldCheck className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
-              <h3 className="text-sm font-bold text-white mb-1">Adil Oyun</h3>
-              <p className="text-xs text-purple-300/60">Hilesiz, eşit ve dengeli oyun ortamı.</p>
-            </div>
+          <div className="glass-panel rounded-xl p-5 border border-white/[0.08]">
+            <ShieldCheck className="w-6 h-6 text-purple-400 mb-3" />
+            <h3 className="text-sm font-semibold text-white mb-1.5">
+              Adil &amp; Dengeli Ekonomi
+            </h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Oyun içi emek değerlidir. Tüm eşyalar ve rütbeler adil rekabeti bozmayacak şekilde dengelenmiştir.
+            </p>
+          </div>
 
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-purple-500/15 text-center">
-              <Zap className="w-8 h-8 text-amber-400 mx-auto mb-2" />
-              <h3 className="text-sm font-bold text-white mb-1">Yüksek Performans</h3>
-              <p className="text-xs text-purple-300/60">Kesintisiz 20 TPS ve 0 lag deneyimi.</p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-purple-500/15 text-center">
-              <Heart className="w-8 h-8 text-pink-400 mx-auto mb-2" />
-              <h3 className="text-sm font-bold text-white mb-1">Samimi Topluluk</h3>
-              <p className="text-xs text-purple-300/60">Birlikte eğlenen dostça bir ortam.</p>
-            </div>
+          <div className="glass-panel rounded-xl p-5 border border-white/[0.08]">
+            <Users className="w-6 h-6 text-purple-400 mb-3" />
+            <h3 className="text-sm font-semibold text-white mb-1.5">
+              Aktif Moderasyon &amp; Destek
+            </h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Saygılı bir oyun ortamı için 7/24 aktif bilet sistemi ve Discord topluluğu üzerinden kesintisiz destek.
+            </p>
           </div>
         </div>
 
-        {/* Call to action */}
-        <div className="glass-panel rounded-3xl p-8 md:p-10 text-center bg-gradient-to-b from-purple-950/60 via-[#180e2b]/80 to-[#120822]/90 border border-purple-500/30 shadow-2xl relative overflow-hidden">
-          <h3 className="text-2xl md:text-3xl font-black text-white mb-3">
-            Aramıza Katılmaya Hazır Mısın?
-          </h3>
-          <p className="text-sm text-purple-200/80 mb-6 max-w-lg mx-auto">
-            Hemen sunucu adresimizi kopyalayarak Minecraft üzerinden Plumya dünyasına bağlanabilirsin!
+        {/* Server Rules / Guidelines */}
+        <div className="glass-panel rounded-xl p-6 border border-white/[0.08] space-y-4">
+          <h2 className="text-base font-semibold text-white">
+            Temel Sunucu Kuralları
+          </h2>
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Tüm oyuncularımızın keyifli ve adil bir deneyim yaşaması adına aşağıdaki kurallar istisnasız uygulanmaktadır:
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+
+          <ul className="space-y-2.5 text-xs text-zinc-300">
+            <li className="flex items-start gap-2.5">
+              <CheckCircle size={15} className="text-purple-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Hile ve Haksız Avantaj:</strong> X-ray, fly, killaura veya oyun mekaniklerini suistimal eden üçüncü parti yazılımlar kesinlikle yasaktır ve kalıcı uzaklaştırma sebebidir.
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <CheckCircle size={15} className="text-purple-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Saygılı İletişim:</strong> Sohbet kanallarında nefret söylemi, hakaret, argo, spam veya reklam içerikli paylaşımlar yasaktır.
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <CheckCircle size={15} className="text-purple-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Hesap ve Eşya Güvenliği:</strong> Hesap güvenliği oyuncunun sorumluluğundadır. Güçlü şifre kullanımı önerilir.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Connection Box */}
+        <div className="glass-panel rounded-xl p-6 border border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-semibold text-white mb-1">
+              Sunucuya Doğrudan Bağlanın
+            </h3>
+            <p className="text-xs text-zinc-400">
+              Minecraft istemcinizde Çok Oyunculu alanına adresi girerek hemen giriş yapabilirsiniz.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <code className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/[0.08] text-xs font-mono text-zinc-200">
+              play.plumya.net
+            </code>
             <Link
               href="/"
-              className="gradient-btn px-6 py-2.5 rounded-xl text-white font-bold text-sm shadow-lg shadow-purple-600/30"
+              className="gradient-btn px-4 py-1.5 rounded-lg text-xs font-medium"
             >
-              Ana Sayfaya Dön
-            </Link>
-            <Link
-              href="/market"
-              className="px-6 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-purple-200 font-semibold text-sm border border-purple-500/30 transition-all"
-            >
-              Mağazayı Gör
+              Ana Sayfa
             </Link>
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -48,55 +48,59 @@ function LoginForm() {
   };
 
   return (
-    <div className="glass-panel rounded-3xl p-8 md:p-10 w-full max-w-md shadow-2xl border border-purple-500/30 relative">
+    <div className="glass-panel rounded-xl p-6 sm:p-8 w-full max-w-sm border border-white/[0.08] relative">
       {/* Header */}
-      <div className="text-center mb-8">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-fuchsia-600 flex items-center justify-center text-2xl text-white shadow-lg shadow-purple-500/30 mx-auto mb-3">
-          🍇
+      <div className="text-center mb-6">
+        <div className="w-10 h-10 rounded-lg bg-purple-950/80 border border-purple-500/30 flex items-center justify-center mx-auto mb-3">
+          <img
+            src="/plumya-logo.png"
+            alt="Plumya Logo"
+            className="w-full h-full object-contain p-1"
+          />
         </div>
-        <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-          Giriş <span className="gradient-title">Yap</span>
+        <h1 className="text-xl font-bold text-white tracking-tight">
+          Hesaba Giriş Yap
         </h1>
-        <p className="text-xs text-purple-300/70 mt-1">Plumya sunucu hesabınıza bağlanın</p>
+        <p className="text-xs text-zinc-400 mt-1">Plumya sunucu hesabınıza bağlanın</p>
       </div>
 
       {/* Error message */}
       {error && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 mb-6 text-xs text-red-300">
+        <div className="bg-red-500/10 border border-red-500/25 rounded-lg px-3.5 py-2.5 mb-5 text-xs text-red-300">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         <div>
-          <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+          <label className="block text-xs font-medium text-zinc-300 mb-1">
             Minecraft Kullanıcı Adı
           </label>
           <div className="relative">
-            <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+            <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
             <input
               type="text"
-              placeholder="Örn: PlumyaAdmin veya OyuncuAdi"
+              placeholder="Kullanıcı adınız"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+              className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+          <label className="block text-xs font-medium text-zinc-300 mb-1">
             Şifre
           </label>
           <div className="relative">
-            <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+            <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
             <input
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+              className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
               required
             />
           </div>
@@ -105,20 +109,20 @@ function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="gradient-btn w-full py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 mt-2 cursor-pointer disabled:opacity-50"
+          className="gradient-btn w-full py-2.5 rounded-lg text-white font-medium text-xs flex items-center justify-center gap-2 mt-4 cursor-pointer disabled:opacity-50"
         >
-          <LogIn size={15} />
+          <LogIn size={14} />
           {loading ? "Giriş Yapılıyor..." : "Giriş Yap"}
         </button>
       </form>
 
-      <p className="text-center text-xs text-purple-300/60 mt-6">
-        Henüz hesabınız yok mu?{" "}
+      <p className="text-center text-xs text-zinc-400 mt-5">
+        Hesabınız yok mu?{" "}
         <Link
           href="/register"
-          className="text-fuchsia-400 hover:text-fuchsia-300 font-bold transition-colors"
+          className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
         >
-          Hemen Kayıt Ol
+          Kayıt Ol
         </Link>
       </p>
     </div>
@@ -127,12 +131,8 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden">
-      {/* Background ambient orbs */}
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-fuchsia-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <Suspense fallback={<div className="text-purple-300 text-xs">Yükleniyor...</div>}>
+    <div className="min-h-screen flex items-center justify-center px-4 py-16">
+      <Suspense fallback={<div className="text-zinc-400 text-xs font-mono">Yükleniyor...</div>}>
         <LoginForm />
       </Suspense>
     </div>

@@ -280,28 +280,25 @@ export default function SecureAdminPage() {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 relative overflow-hidden">
-      {/* Background ambient orbs */}
-      <div className="absolute top-10 left-1/4 w-[600px] h-[300px] bg-purple-600/15 blur-3xl pointer-events-none -z-10" />
-
+    <div className="min-h-screen py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Admin Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-purple-500/20">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-white/[0.08]">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-purple-600 to-fuchsia-600 flex items-center justify-center text-white shadow-xl shadow-purple-900/40 border border-purple-400/30">
-              <ShieldCheck size={24} />
+            <div className="w-10 h-10 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center text-purple-400">
+              <ShieldCheck size={20} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                  Plumya <span className="gradient-title">Yönetim Merkezi</span>
+                <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  Plumya Yönetim Merkezi
                 </h1>
-                <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                  <ShieldCheck size={10} /> Yetkili Alanı
+                <span className="text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                  <ShieldCheck size={10} /> Yetkili
                 </span>
               </div>
-              <p className="text-xs text-purple-300/70 mt-0.5">
-                Hoş geldin, <strong className="text-white">{currentUser.username}</strong>. Sunucu ve oyuncu yönetimini buradan yapabilirsin.
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Hoş geldin, <strong className="text-zinc-200">{currentUser.username}</strong>. Sunucu ve oyuncu yönetim paneli.
               </p>
             </div>
           </div>
@@ -309,14 +306,14 @@ export default function SecureAdminPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => refreshData()}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-xs font-semibold text-purple-200 border border-purple-500/20 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-medium text-zinc-300 border border-white/[0.08] transition-all cursor-pointer"
             >
-              <RefreshCw size={13} />
+              <RefreshCw size={12} />
               Yenile
             </button>
             <Link
               href="/"
-              className="px-4 py-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 text-xs font-semibold text-purple-200 border border-purple-500/20 transition-all"
+              className="px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-xs font-medium text-zinc-300 border border-white/[0.08] transition-all"
             >
               ← Siteye Dön
             </Link>
@@ -324,7 +321,7 @@ export default function SecureAdminPage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8 p-1.5 rounded-2xl bg-black/40 border border-purple-500/20 backdrop-blur-md max-w-2xl">
+        <div className="flex flex-wrap gap-1.5 mb-8 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] max-w-2xl">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -332,13 +329,13 @@ export default function SecureAdminPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`flex-1 flex items-center justify-center gap-2 py-2 px-3.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   active
-                    ? "gradient-btn text-white shadow-md shadow-purple-600/30"
-                    : "text-purple-300/70 hover:text-white hover:bg-white/[0.03]"
+                    ? "bg-white/[0.08] text-white border border-white/[0.1] shadow-xs"
+                    : "text-zinc-400 hover:text-white hover:bg-white/[0.03]"
                 }`}
               >
-                <Icon size={15} />
+                <Icon size={14} className={active ? "text-purple-400" : "text-zinc-500"} />
                 <span>{tab.label}</span>
               </button>
             );

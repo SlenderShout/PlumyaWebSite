@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Copy, Check, Heart } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 
 const quickLinks = [
   { href: "/", label: "Ana Sayfa" },
@@ -22,59 +22,66 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#08040f]/90 border-t border-purple-500/20 backdrop-blur-xl mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="relative bg-[#09090b] border-t border-white/[0.08] mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          {/* Left: Logo & Copyright */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-fuchsia-600 flex items-center justify-center text-white shadow-md shadow-purple-500/30">
-                <span className="text-lg">🍇</span>
+          
+          {/* Brand Info */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-md bg-purple-950/80 border border-purple-500/30 flex items-center justify-center overflow-hidden">
+                <img
+                  src="/plumya-logo.png"
+                  alt="Plumya Logo"
+                  className="w-full h-full object-contain p-0.5"
+                />
               </div>
-              <span className="gradient-title font-extrabold text-xl">
-                Plumya
+              <span className="font-bold text-white text-base tracking-tight">
+                Plumya Network
               </span>
             </div>
-            <p className="text-xs text-purple-300/60 leading-relaxed max-w-sm">
-              Plumya Minecraft Sunucusu — Erik temalı benzersiz bir topluluk deneyimi. Tüm hakları saklıdır.
+            <p className="text-xs text-zinc-400 leading-relaxed max-w-sm">
+              Java &amp; Bedrock destekli Minecraft topluluk sunucusu. Dengeli ekonomi ve korumalı oyun altyapısı.
             </p>
           </div>
 
-          {/* Center: Quick Links */}
-          <div className="flex flex-wrap md:justify-center gap-6">
+          {/* Quick Links */}
+          <div className="flex flex-wrap md:justify-center gap-5">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-xs font-semibold text-purple-300/70 hover:text-white transition-colors"
+                className="text-xs font-medium text-zinc-400 hover:text-white transition-colors"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Right: Server IP Copy */}
+          {/* Server IP Action */}
           <div className="flex md:justify-end">
             <button
               onClick={copyIP}
-              className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-purple-950/40 border border-purple-500/25 hover:border-purple-400/50 text-xs font-mono text-purple-200 transition-all cursor-pointer shadow-sm group"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-mono text-zinc-300 transition-all cursor-pointer"
             >
               <span>play.plumya.net</span>
               {copied ? (
-                <span className="text-emerald-400 flex items-center gap-1 font-sans font-bold text-[11px]">
-                  <Check size={13} /> Kopyalandı
+                <span className="text-emerald-400 font-sans font-medium text-[11px] flex items-center gap-1">
+                  <Check size={12} /> Kopyalandı
                 </span>
               ) : (
-                <Copy size={13} className="text-purple-400 group-hover:text-white transition-colors" />
+                <Copy size={12} className="text-zinc-500" />
               )}
             </button>
           </div>
+
         </div>
 
-        <div className="mt-8 pt-6 border-t border-purple-500/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-purple-300/40">
-          <p>© 2024-2025 Plumya Network. Mojang AB ile resmi bir bağlantısı yoktur.</p>
-          <p className="flex items-center gap-1">
-            Made with <Heart size={11} className="text-pink-500 fill-pink-500" /> for Minecraft players
+        {/* Disclaimer & Copyright */}
+        <div className="mt-8 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-zinc-500">
+          <p>© 2026 Plumya Network. Tüm hakları saklıdır.</p>
+          <p>
+            Plumya bağımsız bir topluluk sunucusudur. Mojang AB veya Microsoft ile resmi bir bağlantısı bulunmamaktadır.
           </p>
         </div>
       </div>

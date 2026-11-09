@@ -57,114 +57,114 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16 relative overflow-hidden">
-      {/* Background ambient orbs */}
-      <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-fuchsia-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-
-      <div className="glass-panel rounded-3xl p-8 md:p-10 w-full max-w-md shadow-2xl border border-purple-500/30 relative">
+    <div className="min-h-screen flex items-center justify-center px-4 py-16">
+      <div className="glass-panel rounded-xl p-6 sm:p-8 w-full max-w-sm border border-white/[0.08] relative">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-600 to-fuchsia-600 flex items-center justify-center text-2xl text-white shadow-lg shadow-purple-500/30 mx-auto mb-3">
-            🍇
+        <div className="text-center mb-6">
+          <div className="w-10 h-10 rounded-lg bg-purple-950/80 border border-purple-500/30 flex items-center justify-center mx-auto mb-3">
+            <img
+              src="/plumya-logo.png"
+              alt="Plumya Logo"
+              className="w-full h-full object-contain p-1"
+            />
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-            Kayıt <span className="gradient-title">Ol</span>
+          <h1 className="text-xl font-bold text-white tracking-tight">
+            Hesap Oluştur
           </h1>
-          <p className="text-xs text-purple-300/70 mt-1">Plumya dünyasına ücretsiz üye olun</p>
+          <p className="text-xs text-zinc-400 mt-1">Plumya sunucu ağına ücretsiz katılın</p>
         </div>
 
         {/* Error */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 mb-6 text-xs text-red-300">
+          <div className="bg-red-500/10 border border-red-500/25 rounded-lg px-3.5 py-2.5 mb-5 text-xs text-red-300">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+            <label className="block text-xs font-medium text-zinc-300 mb-1">
               Minecraft Kullanıcı Adı
             </label>
             <div className="relative">
-              <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+              <User size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="text"
                 placeholder="Örn: SteveCraft"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+            <label className="block text-xs font-medium text-zinc-300 mb-1">
               E-Posta Adresi
             </label>
             <div className="relative">
-              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="email"
                 placeholder="ornek@mail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+            <label className="block text-xs font-medium text-zinc-300 mb-1">
               Şifre
             </label>
             <div className="relative">
-              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+              <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="En az 6 karakter"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-purple-200 mb-1.5">
+            <label className="block text-xs font-medium text-zinc-300 mb-1">
               Şifre Tekrarı
             </label>
             <div className="relative">
-              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-400" />
+              <Lock size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="Şifrenizi tekrar girin"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/40 border border-purple-500/25 focus:border-purple-400 text-white text-xs focus:outline-none focus:ring-1 focus:ring-purple-400 transition-all placeholder:text-purple-300/30"
+                className="w-full pl-9 pr-3.5 py-2 rounded-lg bg-black/40 border border-white/[0.08] focus:border-purple-400 text-white text-xs focus:outline-none transition-all placeholder:text-zinc-600"
                 required
               />
             </div>
           </div>
 
-          {/* KVKK & Kullanıcı Sözleşmesi Onayı */}
-          <div className="pt-1">
-            <label className="flex items-start gap-2.5 cursor-pointer text-xs text-purple-200/80 select-none">
+          {/* KVKK Checkbox */}
+          <div className="pt-1.5">
+            <label className="flex items-start gap-2 cursor-pointer text-[11px] text-zinc-400 select-none">
               <input
                 type="checkbox"
                 checked={kvkkAccepted}
                 onChange={(e) => setKvkkAccepted(e.target.checked)}
-                className="mt-0.5 w-4 h-4 rounded border-purple-500/30 bg-black/40 text-purple-600 focus:ring-purple-500 accent-purple-600 cursor-pointer shrink-0"
+                className="mt-0.5 w-3.5 h-3.5 rounded border-white/[0.2] bg-black/40 text-purple-600 focus:ring-purple-500 accent-purple-600 cursor-pointer shrink-0"
                 required
               />
               <span className="leading-tight">
                 <Link
                   href="/kvkk"
                   target="_blank"
-                  className="text-fuchsia-400 hover:text-fuchsia-300 underline font-semibold transition-colors"
+                  className="text-purple-400 hover:underline"
                 >
                   KVKK Aydınlatma Metni
                 </Link>
@@ -172,7 +172,7 @@ export default function RegisterPage() {
                 <Link
                   href="/kvkk"
                   target="_blank"
-                  className="text-fuchsia-400 hover:text-fuchsia-300 underline font-semibold transition-colors"
+                  className="text-purple-400 hover:underline"
                 >
                   Kullanıcı Sözleşmesi
                 </Link>
@@ -184,18 +184,18 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="gradient-btn w-full py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 mt-2 cursor-pointer disabled:opacity-50"
+            className="gradient-btn w-full py-2.5 rounded-lg text-white font-medium text-xs flex items-center justify-center gap-2 mt-3 cursor-pointer disabled:opacity-50"
           >
-            <UserPlus size={15} />
-            {loading ? "Hesap Oluşturuluyor..." : "Hesap Oluştur"}
+            <UserPlus size={14} />
+            {loading ? "Hesap Oluşturuluyor..." : "Kayıt Ol"}
           </button>
         </form>
 
-        <p className="text-center text-xs text-purple-300/60 mt-6">
-          Zaten bir hesabınız var mı?{" "}
+        <p className="text-center text-xs text-zinc-400 mt-5">
+          Zaten hesabınız var mı?{" "}
           <Link
             href="/login"
-            className="text-fuchsia-400 hover:text-fuchsia-300 font-bold transition-colors"
+            className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
           >
             Giriş Yap
           </Link>

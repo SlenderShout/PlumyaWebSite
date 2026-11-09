@@ -16,16 +16,15 @@ export default function DiscordWidget({
 }: DiscordWidgetProps) {
   const { settings } = useApp();
 
-  // Use props or settings or fallback
   const serverId = propServerId || settings.discordServerId || '1097230283084111882';
   const inviteUrl = propInviteUrl || settings.discordInviteUrl || 'https://discord.gg';
 
   return (
-    <div className="glass-panel rounded-2xl p-4 sm:p-5 relative overflow-hidden border border-purple-500/25 shadow-xl">
+    <div className="glass-panel rounded-xl p-4 sm:p-5 relative overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between gap-2.5 mb-3">
+      <div className="flex items-center justify-between gap-2.5 mb-3.5 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#5865F2]/20 border border-[#5865F2]/40 flex items-center justify-center text-[#5865F2]">
+          <div className="w-8 h-8 rounded-lg bg-[#5865F2]/15 border border-[#5865F2]/30 flex items-center justify-center text-[#5865F2]">
             <svg
               className="w-4 h-4 fill-current"
               viewBox="0 0 24 24"
@@ -35,22 +34,21 @@ export default function DiscordWidget({
             </svg>
           </div>
           <div>
-            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-200">
               Discord Topluluğu
             </h4>
-            <p className="text-[11px] text-purple-300/60">Sesli Sohbet & Etkinlikler</p>
+            <p className="text-[11px] text-zinc-400">Sesli kanallar &amp; sohbet</p>
           </div>
         </div>
 
-        {/* Live indicator */}
-        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[10px] font-semibold text-emerald-400">Canlı</span>
+          <span className="text-[10px] font-medium text-emerald-400">Canlı</span>
         </div>
       </div>
 
-      {/* Discord Iframe Widget */}
-      <div className="w-full overflow-hidden rounded-xl border border-[#5865F2]/20 bg-[#2f3136]/40 backdrop-blur-sm">
+      {/* Embed Frame */}
+      <div className="w-full overflow-hidden rounded-lg border border-white/[0.08] bg-[#2f3136]/50">
         <iframe
           src={`https://discord.com/widget?id=${serverId}&theme=dark`}
           width="100%"
@@ -61,12 +59,12 @@ export default function DiscordWidget({
         />
       </div>
 
-      {/* Direct Invite Button */}
+      {/* Direct Invite Action */}
       <a
         href={inviteUrl}
         target="_blank"
         rel="noreferrer"
-        className="mt-3 flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold text-xs shadow-lg shadow-indigo-600/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
+        className="mt-3 flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-lg bg-[#5865F2] hover:bg-[#4752C4] text-white font-medium text-xs shadow-sm transition-all hover:translate-y-[-1px] active:translate-y-[1px]"
       >
         <svg
           className="w-4 h-4 fill-current"

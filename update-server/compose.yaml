@@ -1,0 +1,15 @@
+services:
+  updates:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${PLUMYA_UPDATE_ROOT:-/srv/plumya-updates}:/srv/updates:ro
+      - updates_caddy_data:/data
+      - updates_caddy_config:/config
+volumes:
+  updates_caddy_data:
+  updates_caddy_config:

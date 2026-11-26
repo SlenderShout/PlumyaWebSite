@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { Box, Newspaper, ShoppingCart, User, Compass, LifeBuoy, LogOut, Shield, Coins } from "lucide-react";
+import { Box, Newspaper, ShoppingCart, User, Compass, LifeBuoy, LogOut, Shield, Coins, Download } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 
 
@@ -28,6 +28,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
   if (pathname.startsWith("/yonetim-plumya")) return <>{children}</>;
   const menu = [
     { label: "Ana Sayfa", href: "/", icon: Compass },
+    { label: "Launcher", href: "/launcher", icon: Download },
     { label: "Market", href: "/market", icon: ShoppingCart },
     { label: "Destek", href: "/support", icon: LifeBuoy },
     { label: "Hakkımızda", href: "/about", icon: User },
@@ -39,7 +40,7 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
         <Link href="/" className="atlas-brand"><img src="/plumya-wiki-logo.png" alt="Plumya logosu" width={64} height={64} /><strong>{settings.siteName === "Plumya Network" || !settings.siteName ? "Plumya" : settings.siteName}</strong><span>Network</span></Link>
         <div className="atlas-rule" aria-hidden="true">◇</div>
         <nav aria-label="Ana menü">
-          {menu.map(({ label, href, icon: Icon }) => <Link key={label} className={"atlas-nav" + (pathname === href ? " active" : "")} href={href}><Icon size={22} /><span>{label}</span></Link>)}
+          {menu.map(({ label, href, icon: Icon }) => <Link key={label} className={"atlas-nav" + (pathname === href ? " active" : "")} aria-current={pathname === href ? "page" : undefined} href={href}><Icon size={22} /><span>{label}</span></Link>)}
         </nav>
         <div className="atlas-sidebar-scene" aria-hidden="true" />
         <a href="https://wiki.plumya.net/" target="_blank" rel="noreferrer" className="atlas-help"><Compass size={18} /> Plumya Wiki ↗</a>

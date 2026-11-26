@@ -1,0 +1,17 @@
+updates.plumya.net {
+	@release {
+		method GET HEAD
+		path_regexp release ^/releases/(client/(stable|beta)/(release-manifest[.]signed[.]json|plumya-client[.]jar)|launcher/(stable|beta)/(release-manifest[.]signed[.]json|Plumya-Launcher-Setup-x64[.]exe|release-notes[.]json))$
+	}
+	handle @release {
+		root * /srv/updates
+		header {
+			Cache-Control "no-store"
+			X-Content-Type-Options "nosniff"
+		}
+		file_server
+	}
+	handle {
+		respond 404
+	}
+}
